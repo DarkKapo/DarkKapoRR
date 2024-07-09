@@ -12,7 +12,7 @@ namespace DarkKapoRR.Endpoints
     {
         public static RouteGroupBuilder MapJugadores(this RouteGroupBuilder group)
         {
-            group.MapGet("/", ObtenerJugadores).CacheOutput(c => c.Expire(TimeSpan.FromSeconds(60)).Tag("jugadores-get"));
+            group.MapGet("/", ObtenerJugadores).CacheOutput(c => c.Expire(TimeSpan.FromMinutes(30)).Tag("jugadores-get"));
             group.MapGet("/{id}", ObtenerJugadorPorId);
             group.MapPost("/", CrearJugador);
             group.MapPut("/{id}", ActualizarJugador);
@@ -38,6 +38,7 @@ namespace DarkKapoRR.Endpoints
         {
             var resultadoValidacion = await validador.ValidateAsync(crearJugadorDTO);
             if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
+            crearJugadorDTO.FechaCreacion = DateTime.Now;
             var jugador = mapper.Map<Jugador>(crearJugadorDTO);//Uso de automapper
             var id = await repositorio.Crear(jugador);
             await outputCacheStore.EvictByTagAsync("jugadores-get", default);
@@ -49,8 +50,12 @@ namespace DarkKapoRR.Endpoints
         {
             var existe = await repositorio.Existe(id);
             if (!existe) return TypedResults.NotFound();
+            var fechaCreacionDB = (await repositorio.ObtenerPorId(id))?.FechaCreacion;
+            crearJugadorDTO.FechaCreacion = fechaCreacionDB ?? DateTime.Now;
             var jugador = mapper.Map<Jugador>(crearJugadorDTO);
             jugador.Id = id;
+            jugador.FechaActualizacion = DateTime.Now;
+            jugador.Version++;
             await repositorio.Actualizar(jugador);
             await outputCacheStore.EvictByTagAsync("jugadores-get", default);
             return TypedResults.NoContent();

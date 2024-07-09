@@ -1,5 +1,0 @@
-1) Cambiar nombre de la solución y proyecto dentro del visual studio, luego cerrar VS
-2) En la Carpeta principal (fuera de visual) cambiar los nombres de la carpeta y el snl
-3) Abrir el snl con block de notas y cambiar los nombres
-4) Eliminar la carpeta .vs
-5) Entrar a VS y cambiar el using de las clases al nuevo nombre

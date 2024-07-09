@@ -1,11 +1,6 @@
-using Microsoft.AspNetCore.Cors;
 using Microsoft.EntityFrameworkCore;
 using DarkKapoRR;
 using DarkKapoRR.Repositorios;
-using DarkKapoRR.Entidades;
-using Microsoft.AspNetCore.OutputCaching;
-using Microsoft.AspNetCore.Http.HttpResults;
-using System.Numerics;
 using DarkKapoRR.Endpoints;
 using FluentValidation;
 

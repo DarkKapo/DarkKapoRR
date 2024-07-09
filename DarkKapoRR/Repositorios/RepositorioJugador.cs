@@ -20,7 +20,7 @@ namespace DarkKapoRR.Repositorios
         }
         public async Task<Jugador?> ObtenerPorId(int id)
         {
-            return await context.Players.FirstOrDefaultAsync(x => x.Id == id);
+            return await context.Players.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
         public async Task<List<Jugador>> ObtenerTodos()
         {

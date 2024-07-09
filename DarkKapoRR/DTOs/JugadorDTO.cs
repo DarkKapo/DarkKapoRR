@@ -8,5 +8,6 @@
         public int Fuerza { get; set; }
         public int Educacion { get; set; }
         public int Aguante { get; set; }
+        public DateTime FechaCreacion { get; set; }
     }
 }
