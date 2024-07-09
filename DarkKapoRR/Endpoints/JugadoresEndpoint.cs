@@ -2,6 +2,7 @@
 using DarkKapoRR.DTOs;
 using DarkKapoRR.Entidades;
 using DarkKapoRR.Repositorios;
+using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OutputCaching;
 
@@ -33,8 +34,10 @@ namespace DarkKapoRR.Endpoints
             return TypedResults.NotFound();
         }
 
-        static async Task<Created<JugadorDTO>> CrearJugador(CrearJugadorDTO crearJugadorDTO, IRepositorioJugador repositorio, IOutputCacheStore outputCacheStore, IMapper mapper)
+        static async Task<Results<Created<JugadorDTO>, ValidationProblem>> CrearJugador(CrearJugadorDTO crearJugadorDTO, IRepositorioJugador repositorio, IOutputCacheStore outputCacheStore, IMapper mapper, IValidator<CrearJugadorDTO> validador)
         {
+            var resultadoValidacion = await validador.ValidateAsync(crearJugadorDTO);
+            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
             var jugador = mapper.Map<Jugador>(crearJugadorDTO);//Uso de automapper
             var id = await repositorio.Crear(jugador);
             await outputCacheStore.EvictByTagAsync("jugadores-get", default);

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Numerics;
 using DarkKapoRR.Endpoints;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 var origenesPermitidos = builder.Configuration.GetValue<string>("OrigenesPermitidos")!; //con ! digo que el valor no sera nulo
@@ -29,6 +30,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IRepositorioJugador, RepositorioJugador>();
 
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 //Fin areas de servicio
 var app = builder.Build();
