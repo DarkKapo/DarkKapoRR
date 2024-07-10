@@ -30,6 +30,10 @@ namespace DarkKapoRR.Repositorios
         {   //Esto es más eficiente que buscar por id
             return await context.Players.AnyAsync(x => x.Id == id);
         }
+        public async Task<bool> Existe(int id, string? nombre)
+        {
+            return await context.Players.AnyAsync(g => g.Id != id && g.Nombre == nombre);
+        }
         public async Task Actualizar(Jugador player)
         {
             context.Update(player);

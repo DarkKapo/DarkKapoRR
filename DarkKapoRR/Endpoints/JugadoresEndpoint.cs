@@ -17,6 +17,7 @@ namespace DarkKapoRR.Endpoints
             group.MapPost("/", CrearJugador);
             group.MapPut("/{id}", ActualizarJugador);
             group.MapDelete("/{id}", EliminarJugador);
+            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado);
             return group;
         }
         static async Task<Ok<List<JugadorDTO>>> ObtenerJugadores(IRepositorioJugador repositorio, IMapper mapper)
@@ -56,6 +57,28 @@ namespace DarkKapoRR.Endpoints
             jugador.Id = id;
             jugador.FechaActualizacion = DateTime.Now;
             jugador.Version++;
+            await repositorio.Actualizar(jugador);
+            await outputCacheStore.EvictByTagAsync("jugadores-get", default);
+            return TypedResults.NoContent();
+        }
+
+        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizadoPersonalizado(ActualizarJugadorDTO actualizarJugadorDTO, IRepositorioJugador repositorio, IOutputCacheStore outputCacheStore, int id, IValidator<ActualizarJugadorDTO> validador)
+        {
+            var resultadoValidacion = await validador.ValidateAsync(actualizarJugadorDTO);
+            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
+
+            var jugador = await repositorio.ObtenerPorId(id);
+            if (jugador == null) return TypedResults.NotFound();
+
+            if(actualizarJugadorDTO.Nombre != null) jugador.Nombre = actualizarJugadorDTO.Nombre;
+            if(actualizarJugadorDTO.EnlacePerfil != null) jugador.EnlacePerfil = actualizarJugadorDTO.EnlacePerfil;
+            if(actualizarJugadorDTO.Fuerza != 0) jugador.Fuerza = actualizarJugadorDTO.Fuerza;
+            if(actualizarJugadorDTO.Educacion != 0) jugador.Educacion = actualizarJugadorDTO.Educacion;
+            if(actualizarJugadorDTO.Aguante != 0) jugador.Aguante = actualizarJugadorDTO.Aguante;
+            actualizarJugadorDTO.FechaCreacion = jugador.FechaCreacion;
+            jugador.FechaActualizacion = DateTime.Now;
+            jugador.Version++;
+
             await repositorio.Actualizar(jugador);
             await outputCacheStore.EvictByTagAsync("jugadores-get", default);
             return TypedResults.NoContent();

@@ -10,5 +10,6 @@ namespace DarkKapoRR.Repositorios
         Task<bool> Existe(int id);
         Task Actualizar(Jugador player);
         Task Eliminar(int id);
+        Task<bool> Existe(int id, string? nombre);
     }
 }
