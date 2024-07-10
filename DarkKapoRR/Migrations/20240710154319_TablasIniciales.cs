@@ -12,7 +12,7 @@ namespace DarkKapoRR.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Players",
+                name: "Jugadores",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -28,11 +28,11 @@ namespace DarkKapoRR.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Players", x => x.Id);
+                    table.PrimaryKey("PK_Jugadores", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Regions",
+                name: "Regiones",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -54,7 +54,7 @@ namespace DarkKapoRR.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Regions", x => x.Id);
+                    table.PrimaryKey("PK_Regiones", x => x.Id);
                 });
         }
 
@@ -62,10 +62,10 @@ namespace DarkKapoRR.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Players");
+                name: "Jugadores");
 
             migrationBuilder.DropTable(
-                name: "Regions");
+                name: "Regiones");
         }
     }
 }

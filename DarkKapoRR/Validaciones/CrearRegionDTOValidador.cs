@@ -6,7 +6,7 @@ namespace DarkKapoRR.Validaciones
 {
     public class CrearRegionDTOValidador : AbstractValidator<CrearRegionDTO>
     {
-        public CrearRegionDTOValidador(IRepositorioJugador repositorio) 
+        public CrearRegionDTOValidador(IRepositorioRegion repositorio) 
         {
             RuleFor(n => n.Nombre).NotEmpty().WithMessage("{PropertyName} es requerido").Length(3, 50).WithMessage("{PropertyName} tiene {TotalLength} letras. Debe tener una longitud entre {MinLength} y {MaxLength} letras.");
             RuleFor(m => m.AcademiaMilitar).GreaterThanOrEqualTo(0).WithMessage("{PropertyName} debe ser mayor o igual a {ComparisonValue}");

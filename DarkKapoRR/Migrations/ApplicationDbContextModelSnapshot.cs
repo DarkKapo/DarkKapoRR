@@ -59,7 +59,7 @@ namespace DarkKapoRR.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Players");
+                    b.ToTable("Jugadores");
                 });
 
             modelBuilder.Entity("DarkKapoRR.Entidades.Region", b =>
@@ -116,7 +116,7 @@ namespace DarkKapoRR.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Regions");
+                    b.ToTable("Regiones");
                 });
 #pragma warning restore 612, 618
         }

@@ -47,8 +47,10 @@ namespace DarkKapoRR.Endpoints
             return TypedResults.Created($"/jugador/{id}", jugadorDTO);
         }
 
-        static async Task<Results<NoContent, NotFound>> ActualizarJugador(CrearJugadorDTO crearJugadorDTO, IRepositorioJugador repositorio, IOutputCacheStore outputCacheStore, int id, IMapper mapper)
+        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizarJugador(CrearJugadorDTO crearJugadorDTO, IRepositorioJugador repositorio, IOutputCacheStore outputCacheStore, int id, IMapper mapper, IValidator<CrearJugadorDTO> validador)
         {
+            var resultadoValidacion = await validador.ValidateAsync(crearJugadorDTO);
+            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
             var existe = await repositorio.Existe(id);
             if (!existe) return TypedResults.NotFound();
             var fechaCreacionDB = (await repositorio.ObtenerPorId(id))?.FechaCreacion;

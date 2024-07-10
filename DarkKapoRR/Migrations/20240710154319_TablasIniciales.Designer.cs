@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DarkKapoRR.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240710054049_TablasIniciales")]
+    [Migration("20240710154319_TablasIniciales")]
     partial class TablasIniciales
     {
         /// <inheritdoc />
@@ -62,7 +62,7 @@ namespace DarkKapoRR.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Players");
+                    b.ToTable("Jugadores");
                 });
 
             modelBuilder.Entity("DarkKapoRR.Entidades.Region", b =>
@@ -119,7 +119,7 @@ namespace DarkKapoRR.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Regions");
+                    b.ToTable("Regiones");
                 });
 #pragma warning restore 612, 618
         }

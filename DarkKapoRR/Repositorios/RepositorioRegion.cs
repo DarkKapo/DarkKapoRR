@@ -13,25 +13,25 @@ namespace DarkKapoRR.Repositorios
 
         public async Task<int> Crear(Region region)
         {
-            context.Regions.Add(region);
+            context.Regiones.Add(region);
             await context.SaveChangesAsync();
             return region.Id;
         }
         public async Task<Region?> ObtenerPorId(int id)
         {
-            return await context.Regions.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return await context.Regiones.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
         public async Task<List<Region>> ObtenerTodos()
         {
-            return await context.Regions.OrderByDescending(i => i.Id).ToListAsync();
+            return await context.Regiones.OrderByDescending(i => i.Id).ToListAsync();
         }
         public async Task<bool> Existe(int id)
         {   //Esto es más eficiente que buscar por id
-            return await context.Regions.AnyAsync(x => x.Id == id);
+            return await context.Regiones.AnyAsync(x => x.Id == id);
         }
         public async Task<bool> Existe(int id, string? nombre)
         {
-            return await context.Regions.AnyAsync(g => g.Id != id && g.Nombre == nombre);
+            return await context.Regiones.AnyAsync(g => g.Id != id && g.Nombre == nombre);
         }
         public async Task Actualizar(Region region)
         {
@@ -40,7 +40,7 @@ namespace DarkKapoRR.Repositorios
         }
         public async Task Eliminar(int id)
         {
-            await context.Regions.Where(x => x.Id == id).ExecuteDeleteAsync();
+            await context.Regiones.Where(x => x.Id == id).ExecuteDeleteAsync();
         }
     }
 }

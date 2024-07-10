@@ -6,12 +6,17 @@ namespace DarkKapoRR.Validaciones
 {
     public class ActualizarJugadorDTOValidador : AbstractValidator<ActualizarJugadorDTO>
     {
-        public ActualizarJugadorDTOValidador(IRepositorioJugador repositorio)
+        public ActualizarJugadorDTOValidador(IRepositorioJugador repositorio, IHttpContextAccessor httpContextAccessor)
         {
+            var valorRutaId = httpContextAccessor.HttpContext?.Request.RouteValues["id"];
+            var id = 0;
+
+            if (valorRutaId is string valorString) int.TryParse(valorString, out id);
+
             RuleFor(n => n.Nombre).Must(NombreValido).WithMessage("{PropertyName} debe tener entre 3 a 50 caracteres")
                                   .MustAsync(async (nombre, _) =>
                                   {
-                                      var existe = await repositorio.Existe(id: 0, nombre);
+                                      var existe = await repositorio.Existe(id, nombre);
                                       return !existe;
                                   }).WithMessage(g => $"Ya existe un jugador con nombre {g.Nombre}");
             RuleFor(e => e.Fuerza).Must(EstadisticaValida).WithMessage("{PropertyName} debe estar entre 30 y 999");

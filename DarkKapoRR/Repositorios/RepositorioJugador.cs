@@ -14,25 +14,25 @@ namespace DarkKapoRR.Repositorios
 
         public async Task<int> Crear(Jugador player)
         {
-            context.Players.Add(player);
+            context.Jugadores.Add(player);
             await context.SaveChangesAsync();
             return player.Id;
         }
         public async Task<Jugador?> ObtenerPorId(int id)
         {
-            return await context.Players.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return await context.Jugadores.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
         public async Task<List<Jugador>> ObtenerTodos()
         {
-            return await context.Players.OrderByDescending(i => i.Id).ToListAsync();
+            return await context.Jugadores.OrderByDescending(i => i.Id).ToListAsync();
         }
         public async Task<bool> Existe(int id)
         {   //Esto es más eficiente que buscar por id
-            return await context.Players.AnyAsync(x => x.Id == id);
+            return await context.Jugadores.AnyAsync(x => x.Id == id);
         }
         public async Task<bool> Existe(int id, string? nombre)
         {
-            return await context.Players.AnyAsync(g => g.Id != id && g.Nombre == nombre);
+            return await context.Jugadores.AnyAsync(g => g.Id != id && g.Nombre == nombre);
         }
         public async Task Actualizar(Jugador player)
         {
@@ -41,7 +41,7 @@ namespace DarkKapoRR.Repositorios
         }
         public async Task Eliminar(int id)
         {
-            await context.Players.Where(x => x.Id == id).ExecuteDeleteAsync();
+            await context.Jugadores.Where(x => x.Id == id).ExecuteDeleteAsync();
         }
     }
 }
