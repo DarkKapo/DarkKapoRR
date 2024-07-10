@@ -1,7 +1,6 @@
 ﻿using DarkKapoRR.DTOs;
 using DarkKapoRR.Repositorios;
 using FluentValidation;
-using Microsoft.IdentityModel.Tokens;
 
 namespace DarkKapoRR.Validaciones
 {

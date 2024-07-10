@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-namespace DarkKapoRR.Entidades
+namespace DarkKapoRR.DTOs
 {
-    public class Region
+    public class CrearRegionDTO
     {
-        public int Id { get; set; }
-        [StringLength(50)]
         public string Nombre { get; set; } = null!;
         public int AcademiaMilitar { get; set; } //No tiene consumo de energía
         public int Hospital { get; set; }
@@ -17,8 +16,7 @@ namespace DarkKapoRR.Entidades
         public int PuertoEspacial { get; set; }
         public int Aeropuerto { get; set; }
         public int Viviendas { get; set; }
+        [JsonIgnore]
         public DateTime FechaCreacion { get; set; }
-        public DateTime? FechaActualizacion { get; set; }
-        public int Version { get; set; }
     }
 }

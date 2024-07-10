@@ -10,6 +10,9 @@ namespace DarkKapoRR.Utilidades
         {
             CreateMap<CrearJugadorDTO, Jugador>();
             CreateMap<Jugador, JugadorDTO>();
+
+            CreateMap<CrearRegionDTO, Region>();
+            CreateMap<Region, RegionDTO>();
         }
     }
 }

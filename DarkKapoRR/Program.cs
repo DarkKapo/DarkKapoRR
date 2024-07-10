@@ -23,7 +23,9 @@ builder.Services.AddEndpointsApiExplorer(); //Documentacion de la API
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IRepositorioJugador, RepositorioJugador>();
+builder.Services.AddScoped<IRepositorioRegion, RepositorioRegion>();
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
@@ -43,6 +45,7 @@ app.UseCors();
 app.UseOutputCache(); //Uso de cache para optimizar las preguntas a la base de datos
 
 app.MapGroup("/jugadores").MapJugadores();
+app.MapGroup("/regiones").MapRegiones();
 
 //Fin area middleware
 

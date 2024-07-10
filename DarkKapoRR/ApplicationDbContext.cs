@@ -14,7 +14,7 @@ namespace DarkKapoRR
         }
 
         //public DbSet<State> States { get; set; }
-        //public DbSet<Region> Regions { get; set; }
+        public DbSet<Region> Regions { get; set; }
         public DbSet<Jugador> Players { get; set; }
     }
 }

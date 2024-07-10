@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DarkKapoRR.Entidades
+namespace DarkKapoRR.DTOs
 {
-    public class Region
+    public class RegionDTO
     {
         public int Id { get; set; }
-        [StringLength(50)]
         public string Nombre { get; set; } = null!;
         public int AcademiaMilitar { get; set; } //No tiene consumo de energía
         public int Hospital { get; set; }
@@ -18,7 +17,5 @@ namespace DarkKapoRR.Entidades
         public int Aeropuerto { get; set; }
         public int Viviendas { get; set; }
         public DateTime FechaCreacion { get; set; }
-        public DateTime? FechaActualizacion { get; set; }
-        public int Version { get; set; }
     }
 }
