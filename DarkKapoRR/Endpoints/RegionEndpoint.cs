@@ -16,7 +16,7 @@ namespace DarkKapoRR.Endpoints
             group.MapGet("/{id}", ObtenerRegionPorId);
             group.MapPost("/", CrearRegion);
             group.MapPut("/{id}", ActualizarRegion);
-            //group.MapDelete("/{id}", EliminarRegion);
+            group.MapDelete("/{id}", EliminarRegion);
             group.MapPut("/{id}/personalizado", ActualizadoPersonalizado);
             return group;
         }
@@ -84,6 +84,15 @@ namespace DarkKapoRR.Endpoints
             region.Version++;
 
             await repositorio.Actualizar(region);
+            await outputCacheStore.EvictByTagAsync("regiones-get", default);
+            return TypedResults.NoContent();
+        }
+        static async Task<Results<NoContent, NotFound>> EliminarRegion(IRepositorioRegion repositorio, IOutputCacheStore outputCacheStore, int id)
+        {
+            var existe = await repositorio.Existe(id);
+            if (!existe) return TypedResults.NotFound();
+
+            await repositorio.Eliminar(id);
             await outputCacheStore.EvictByTagAsync("regiones-get", default);
             return TypedResults.NoContent();
         }
