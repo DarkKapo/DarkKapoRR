@@ -79,6 +79,7 @@ namespace DarkKapoRR.Endpoints
             if(actualizarRegionDTO.PuertoEspacial != null) region.PuertoEspacial = actualizarRegionDTO.PuertoEspacial.GetValueOrDefault();
             if(actualizarRegionDTO.Aeropuerto != null) region.Aeropuerto = actualizarRegionDTO.Aeropuerto.GetValueOrDefault();
             if(actualizarRegionDTO.Viviendas != null) region.Viviendas = actualizarRegionDTO.Viviendas.GetValueOrDefault();
+            if(actualizarRegionDTO.EstadoId != null) region.EstadoId = actualizarRegionDTO.EstadoId.GetValueOrDefault();
             actualizarRegionDTO.FechaCreacion = region.FechaCreacion;
             region.FechaActualizacion = DateTime.Now;
             region.Version++;

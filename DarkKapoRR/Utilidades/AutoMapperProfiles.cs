@@ -13,6 +13,9 @@ namespace DarkKapoRR.Utilidades
 
             CreateMap<CrearRegionDTO, Region>();
             CreateMap<Region, RegionDTO>();
+
+            CreateMap<CrearEstadoDTO, Estado>();
+            CreateMap<Estado, EstadoDTO>();
         }
     }
 }

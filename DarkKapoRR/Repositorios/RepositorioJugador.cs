@@ -20,11 +20,11 @@ namespace DarkKapoRR.Repositorios
         }
         public async Task<Jugador?> ObtenerPorId(int id)
         {
-            return await context.Jugadores.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return await context.Jugadores.Include(e => e.Estado).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
         public async Task<List<Jugador>> ObtenerTodos()
         {
-            return await context.Jugadores.OrderByDescending(i => i.Id).ToListAsync();
+            return await context.Jugadores.OrderByDescending(i => i.Id).Include(e => e.Estado).ToListAsync();
         }
         public async Task<bool> Existe(int id)
         {   //Esto es más eficiente que buscar por id

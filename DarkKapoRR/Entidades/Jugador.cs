@@ -12,6 +12,8 @@ namespace DarkKapoRR.Entidades
         public int Fuerza { get; set; }
         public int Educacion { get; set; }
         public int Aguante { get; set; }
+        public int EstadoId { get; set; }
+        public Estado Estado { get; set; } = null!;
         public DateTime FechaCreacion { get; set; }
         public DateTime? FechaActualizacion { get; set; } = null;
         public int Version { get; set; }

@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-namespace DarkKapoRR.Entidades
+namespace DarkKapoRR.DTOs
 {
-    public class Estado
+    public class CrearEstadoDTO
     {
-        public int Id { get; set; }
         [StringLength(50)]
         public string Nombre { get; set; } = null!;
+        [JsonIgnore]
         public DateTime FechaCreacion { get; set; }
-        public DateTime? FechaActualizacion { get; set; }
-        public int Version { get; set; }
     }
 }

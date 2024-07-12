@@ -1,4 +1,6 @@
-﻿namespace DarkKapoRR.DTOs
+﻿using DarkKapoRR.Entidades;
+
+namespace DarkKapoRR.DTOs
 {
     public class JugadorDTO
     {
@@ -8,6 +10,8 @@
         public int Fuerza { get; set; }
         public int Educacion { get; set; }
         public int Aguante { get; set; }
+        public int EstadoId { get; set; }
+        public Estado Estado { get; set; } = null!;
         public DateTime FechaCreacion { get; set; }
     }
 }

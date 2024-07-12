@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DarkKapoRR.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240710154319_TablasIniciales")]
+    [Migration("20240711225039_TablasIniciales")]
     partial class TablasIniciales
     {
         /// <inheritdoc />
@@ -24,6 +24,33 @@ namespace DarkKapoRR.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DarkKapoRR.Entidades.Estado", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("FechaActualizacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Estados");
+                });
 
             modelBuilder.Entity("DarkKapoRR.Entidades.Jugador", b =>
                 {
@@ -43,6 +70,9 @@ namespace DarkKapoRR.Migrations
                         .HasMaxLength(2083)
                         .HasColumnType("nvarchar(2083)");
 
+                    b.Property<int>("EstadoId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("FechaActualizacion")
                         .HasColumnType("datetime2");
 
@@ -61,6 +91,8 @@ namespace DarkKapoRR.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EstadoId");
 
                     b.ToTable("Jugadores");
                 });
@@ -83,6 +115,9 @@ namespace DarkKapoRR.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Escuela")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EstadoId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("FechaActualizacion")
@@ -119,7 +154,38 @@ namespace DarkKapoRR.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EstadoId");
+
                     b.ToTable("Regiones");
+                });
+
+            modelBuilder.Entity("DarkKapoRR.Entidades.Jugador", b =>
+                {
+                    b.HasOne("DarkKapoRR.Entidades.Estado", "Estado")
+                        .WithMany("Jugadores")
+                        .HasForeignKey("EstadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Estado");
+                });
+
+            modelBuilder.Entity("DarkKapoRR.Entidades.Region", b =>
+                {
+                    b.HasOne("DarkKapoRR.Entidades.Estado", "Estado")
+                        .WithMany("Regiones")
+                        .HasForeignKey("EstadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Estado");
+                });
+
+            modelBuilder.Entity("DarkKapoRR.Entidades.Estado", b =>
+                {
+                    b.Navigation("Jugadores");
+
+                    b.Navigation("Regiones");
                 });
 #pragma warning restore 612, 618
         }

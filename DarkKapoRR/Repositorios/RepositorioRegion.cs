@@ -19,11 +19,11 @@ namespace DarkKapoRR.Repositorios
         }
         public async Task<Region?> ObtenerPorId(int id)
         {
-            return await context.Regiones.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return await context.Regiones.Include(e => e.Estado).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
         public async Task<List<Region>> ObtenerTodos()
         {
-            return await context.Regiones.OrderByDescending(i => i.Id).ToListAsync();
+            return await context.Regiones.OrderByDescending(i => i.Id).Include(e => e.Estado).ToListAsync();
         }
         public async Task<bool> Existe(int id)
         {   //Esto es más eficiente que buscar por id

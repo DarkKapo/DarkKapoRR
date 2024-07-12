@@ -10,10 +10,10 @@ namespace DarkKapoRR
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            base.OnModelCreating(modelBuilder);
         }
 
-        //public DbSet<State> States { get; set; }
+        public DbSet<Estado> Estados { get; set; }
         public DbSet<Region> Regiones { get; set; }
         public DbSet<Jugador> Jugadores { get; set; }
     }

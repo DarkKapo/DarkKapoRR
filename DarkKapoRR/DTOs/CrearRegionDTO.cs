@@ -16,6 +16,7 @@ namespace DarkKapoRR.DTOs
         public int PuertoEspacial { get; set; }
         public int Aeropuerto { get; set; }
         public int Viviendas { get; set; }
+        public int EstadoId { get; set; }
         [JsonIgnore]
         public DateTime FechaCreacion { get; set; }
     }

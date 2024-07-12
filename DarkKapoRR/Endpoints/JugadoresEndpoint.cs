@@ -77,6 +77,7 @@ namespace DarkKapoRR.Endpoints
             if(actualizarJugadorDTO.Fuerza != 0) jugador.Fuerza = actualizarJugadorDTO.Fuerza;
             if(actualizarJugadorDTO.Educacion != 0) jugador.Educacion = actualizarJugadorDTO.Educacion;
             if(actualizarJugadorDTO.Aguante != 0) jugador.Aguante = actualizarJugadorDTO.Aguante;
+            if(actualizarJugadorDTO.EstadoId != 0) jugador.EstadoId = actualizarJugadorDTO.EstadoId;
             actualizarJugadorDTO.FechaCreacion = jugador.FechaCreacion;
             jugador.FechaActualizacion = DateTime.Now;
             jugador.Version++;

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DarkKapoRR.Entidades;
+using System.ComponentModel.DataAnnotations;
 
 namespace DarkKapoRR.DTOs
 {
@@ -16,6 +17,9 @@ namespace DarkKapoRR.DTOs
         public int PuertoEspacial { get; set; }
         public int Aeropuerto { get; set; }
         public int Viviendas { get; set; }
+        public int ConsumoEnergia { get; set; } // revisar que hace
+        public int EstadoId { get; set; }
+        public Estado Estado { get; set; } = null!;
         public DateTime FechaCreacion { get; set; }
     }
 }

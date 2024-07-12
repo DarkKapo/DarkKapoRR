@@ -17,6 +17,9 @@ namespace DarkKapoRR.Entidades
         public int PuertoEspacial { get; set; }
         public int Aeropuerto { get; set; }
         public int Viviendas { get; set; }
+        public int ConsumoEnergia => Hospital + BaseMilitar + Escuela + SistemaMisiles + PuertoNaval + PuertoEspacial + Aeropuerto + Viviendas; // revisar que hace
+        public int EstadoId { get; set; }
+        public Estado Estado { get; set; } = null!;
         public DateTime FechaCreacion { get; set; }
         public DateTime? FechaActualizacion { get; set; }
         public int Version { get; set; }

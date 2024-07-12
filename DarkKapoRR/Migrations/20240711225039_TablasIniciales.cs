@@ -12,6 +12,22 @@ namespace DarkKapoRR.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Estados",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaActualizacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Version = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Estados", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Jugadores",
                 columns: table => new
                 {
@@ -22,6 +38,7 @@ namespace DarkKapoRR.Migrations
                     Fuerza = table.Column<int>(type: "int", nullable: false),
                     Educacion = table.Column<int>(type: "int", nullable: false),
                     Aguante = table.Column<int>(type: "int", nullable: false),
+                    EstadoId = table.Column<int>(type: "int", nullable: false),
                     FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FechaActualizacion = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Version = table.Column<int>(type: "int", nullable: false)
@@ -29,6 +46,12 @@ namespace DarkKapoRR.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Jugadores", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Jugadores_Estados_EstadoId",
+                        column: x => x.EstadoId,
+                        principalTable: "Estados",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -48,6 +71,7 @@ namespace DarkKapoRR.Migrations
                     PuertoEspacial = table.Column<int>(type: "int", nullable: false),
                     Aeropuerto = table.Column<int>(type: "int", nullable: false),
                     Viviendas = table.Column<int>(type: "int", nullable: false),
+                    EstadoId = table.Column<int>(type: "int", nullable: false),
                     FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FechaActualizacion = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Version = table.Column<int>(type: "int", nullable: false)
@@ -55,7 +79,23 @@ namespace DarkKapoRR.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Regiones", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Regiones_Estados_EstadoId",
+                        column: x => x.EstadoId,
+                        principalTable: "Estados",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Jugadores_EstadoId",
+                table: "Jugadores",
+                column: "EstadoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Regiones_EstadoId",
+                table: "Regiones",
+                column: "EstadoId");
         }
 
         /// <inheritdoc />
@@ -66,6 +106,9 @@ namespace DarkKapoRR.Migrations
 
             migrationBuilder.DropTable(
                 name: "Regiones");
+
+            migrationBuilder.DropTable(
+                name: "Estados");
         }
     }
 }
