@@ -48,11 +48,14 @@ namespace DarkKapoRR.Endpoints
         {
             var resultadoValidacion = await validador.ValidateAsync(crearRegionDTO);
             if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
+
             var existe = await repositorio.Existe(id);
             if (!existe) return TypedResults.NotFound();
+
             var fechaCreacionDB = (await repositorio.ObtenerPorId(id))?.FechaCreacion;
             crearRegionDTO.FechaCreacion = fechaCreacionDB ?? DateTime.Now;
             var region = mapper.Map<Region>(crearRegionDTO);
+
             region.Id = id;
             region.FechaActualizacion = DateTime.Now;
             region.Version++;
@@ -80,6 +83,8 @@ namespace DarkKapoRR.Endpoints
             if(actualizarRegionDTO.Aeropuerto != null) region.Aeropuerto = actualizarRegionDTO.Aeropuerto.GetValueOrDefault();
             if(actualizarRegionDTO.Viviendas != null) region.Viviendas = actualizarRegionDTO.Viviendas.GetValueOrDefault();
             if(actualizarRegionDTO.EstadoId != null) region.EstadoId = actualizarRegionDTO.EstadoId.GetValueOrDefault();
+
+            region.Id = id;
             actualizarRegionDTO.FechaCreacion = region.FechaCreacion;
             region.FechaActualizacion = DateTime.Now;
             region.Version++;

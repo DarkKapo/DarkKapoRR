@@ -15,6 +15,9 @@ namespace DarkKapoRR.Endpoints
             group.MapGet("/", ObtenerEstados).CacheOutput(c => c.Expire(TimeSpan.FromMinutes(30)).Tag("estados-get"));
             group.MapGet("/{id}", ObtenerEstadoPorId);
             group.MapPost("/", CrearEstado);
+            group.MapPut("/{id}", ActualizarEstado);
+            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado);
+            group.MapDelete("/{id}", EliminarEstado);
             return group;
         }
         static async Task<Ok<List<EstadoDTO>>> ObtenerEstados(IRepositorioEstado repositorio, IMapper mapper)
@@ -40,6 +43,52 @@ namespace DarkKapoRR.Endpoints
             await outputCacheStore.EvictByTagAsync("estados-get", default);
             var estadoDTO = mapper.Map<EstadoDTO>(estado);
             return TypedResults.Created($"/estado/{id}", estadoDTO);
+        }
+        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizarEstado(CrearEstadoDTO crearEstadoDTO, IRepositorioEstado repositorio, IOutputCacheStore outputCacheStore, int id, IMapper mapper, IValidator<CrearEstadoDTO> validador)
+        {
+            var resultadoValidacion = await validador.ValidateAsync(crearEstadoDTO);
+            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
+
+            var existe = await repositorio.Existe(id);
+            if (!existe) return TypedResults.NotFound();
+
+            var fechaCreacionDB = (await repositorio.ObtenerPorId(id))?.FechaCreacion;
+            crearEstadoDTO.FechaCreacion = fechaCreacionDB ?? DateTime.Now;
+            var estado = mapper.Map<Estado>(crearEstadoDTO);
+
+            estado.Id = id;
+            estado.FechaActualizacion = DateTime.Now;
+            estado.Version++;
+            await repositorio.Actualizar(estado);
+            await outputCacheStore.EvictByTagAsync("estados-get", default);
+            return TypedResults.NoContent();
+        }
+        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizadoPersonalizado(ActualizarEstadoDTO actualizarEstadoDTO, IRepositorioEstado repositorio, IOutputCacheStore outputCacheStore, int id, IValidator<ActualizarEstadoDTO> validador)
+        {
+            var resultadoValidacion = await validador.ValidateAsync(actualizarEstadoDTO);
+            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
+
+            var estado = await repositorio.ObtenerPorId(id);
+            if (estado == null) return TypedResults.NotFound();
+
+            var fechaCreacionDB = (await repositorio.ObtenerPorId(id))?.FechaCreacion;
+            if(actualizarEstadoDTO.Nombre != null) estado.Nombre = estado.Nombre;
+
+            estado.Id = id;
+            estado.FechaActualizacion = DateTime.Now;
+            estado.Version++;
+            await repositorio.Actualizar(estado);
+            await outputCacheStore.EvictByTagAsync("estados-get", default);
+            return TypedResults.NoContent();
+        }
+
+        static async Task<Results<NoContent, NotFound>> EliminarEstado(IRepositorioEstado repositorio, IOutputCacheStore outputCacheStore, int id)
+        {
+            var existe = await repositorio.Existe(id);
+            if (!existe) return TypedResults.NotFound();
+            await repositorio.Eliminar(id);
+            await outputCacheStore.EvictByTagAsync("estados-get", default);
+            return TypedResults.NoContent();
         }
     }
 }
