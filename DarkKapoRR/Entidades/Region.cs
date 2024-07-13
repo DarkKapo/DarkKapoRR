@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DarkKapoRR.Entidades
 {
@@ -21,6 +22,7 @@ namespace DarkKapoRR.Entidades
         public int DañoInicial => AcademiaMilitar * 450000 * 2;
         public int DefensaInicial => ((Hospital + 2*BaseMilitar + Escuela + SistemaMisiles + PuertoNaval + PlantaEnergia + PuertoEspacial + Aeropuerto) * 50000 * 2) + DañoInicial;
         public int EstadoId { get; set; }
+        [ForeignKey("EstadoId")]
         public Estado Estado { get; set; } = null!;
         public DateTime FechaCreacion { get; set; }
         public DateTime? FechaActualizacion { get; set; }

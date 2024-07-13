@@ -10,8 +10,8 @@ namespace DarkKapoRR.DTOs
         public int Fuerza { get; set; }
         public int Educacion { get; set; }
         public int Aguante { get; set; }
-        public int EstadoId { get; set; }
-        public Estado Estado { get; set; } = null!;
+        public int RegionId { get; set; }
+        public Region Region { get; set; } = null!;
         public DateTime FechaCreacion { get; set; }
     }
 }
