@@ -17,7 +17,9 @@ namespace DarkKapoRR.DTOs
         public int PuertoEspacial { get; set; }
         public int Aeropuerto { get; set; }
         public int Viviendas { get; set; }
-        public int ConsumoEnergia { get; set; } // revisar que hace
+        public int ConsumoEnergia { get; set; }
+        public int DañoInicial { get; set; }
+        public int DefensaInicial { get; set; }
         public int EstadoId { get; set; }
         public Estado Estado { get; set; } = null!;
         public DateTime FechaCreacion { get; set; }

@@ -17,7 +17,9 @@ namespace DarkKapoRR.Entidades
         public int PuertoEspacial { get; set; }
         public int Aeropuerto { get; set; }
         public int Viviendas { get; set; }
-        public int ConsumoEnergia => Hospital + BaseMilitar + Escuela + SistemaMisiles + PuertoNaval + PuertoEspacial + Aeropuerto + Viviendas; // revisar que hace
+        public int ConsumoEnergia => PlantaEnergia*10 - (Hospital + BaseMilitar + Escuela + SistemaMisiles + PuertoNaval + PuertoEspacial + Aeropuerto)*2;
+        public int DañoInicial => AcademiaMilitar * 450000 * 2;
+        public int DefensaInicial => ((Hospital + 2*BaseMilitar + Escuela + SistemaMisiles + PuertoNaval + PlantaEnergia + PuertoEspacial + Aeropuerto) * 50000 * 2) + DañoInicial;
         public int EstadoId { get; set; }
         public Estado Estado { get; set; } = null!;
         public DateTime FechaCreacion { get; set; }
