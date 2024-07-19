@@ -9,7 +9,7 @@ namespace DarkKapoRR.DTOs
         public int Fuerza { get; set; } = 30;
         public int Educacion { get; set; } = 30;
         public int Aguante { get; set; } = 30;
-        public int EstadoId { get; set; }
+        public int RegionId { get; set; }
         [JsonIgnore]
         public DateTime FechaCreacion { get; set; }
     }

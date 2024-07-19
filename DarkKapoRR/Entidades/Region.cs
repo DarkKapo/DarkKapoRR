@@ -24,7 +24,11 @@ namespace DarkKapoRR.Entidades
         public int EstadoId { get; set; }
         [ForeignKey("EstadoId")]
         public Estado Estado { get; set; } = null!;
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime FechaCreacion { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? FechaActualizacion { get; set; }
         public int Version { get; set; }
     }

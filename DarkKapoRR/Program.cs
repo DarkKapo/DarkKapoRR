@@ -25,6 +25,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IRepositorioJugador, RepositorioJugador>();
 builder.Services.AddScoped<IRepositorioRegion, RepositorioRegion>();
 builder.Services.AddScoped<IRepositorioEstado, RepositorioEstado>();
+builder.Services.AddScoped<IRepositorioDañoJugador, RepositorioDañoJugador>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(Program));
@@ -48,6 +49,7 @@ app.UseOutputCache(); //Uso de cache para optimizar las preguntas a la base de d
 app.MapGroup("/jugadores").MapJugadores();
 app.MapGroup("/regiones").MapRegiones();
 app.MapGroup("/estados").MapEstados();
+app.MapGroup("/dañosjugador").MapDañoJugador();
 
 //Fin area middleware
 

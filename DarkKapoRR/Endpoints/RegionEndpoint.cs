@@ -63,7 +63,7 @@ namespace DarkKapoRR.Endpoints
             await outputCacheStore.EvictByTagAsync("regiones-get", default);
             return TypedResults.NoContent();
         }
-        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizadoPersonalizado(ActualizarRegionDTO actualizarRegionDTO, IRepositorioRegion repositorio, IOutputCacheStore outputCacheStore, int id, IMapper mapper, IValidator<ActualizarRegionDTO> validador)
+        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizadoPersonalizado(ActualizarRegionDTO actualizarRegionDTO, IRepositorioRegion repositorio, IOutputCacheStore outputCacheStore, int id, IValidator<ActualizarRegionDTO> validador)
         {
             var resultadoValidacion = await validador.ValidateAsync(actualizarRegionDTO);
             if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());

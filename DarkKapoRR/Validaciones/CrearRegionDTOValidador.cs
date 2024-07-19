@@ -18,6 +18,8 @@ namespace DarkKapoRR.Validaciones
             RuleFor(p => p.PlantaEnergia).GreaterThanOrEqualTo(0).WithMessage("{PropertyName} debe ser mayor o igual a {ComparisonValue}");
             RuleFor(p => p.PuertoEspacial).GreaterThanOrEqualTo(0).WithMessage("{PropertyName} debe ser mayor o igual a {ComparisonValue}");
             RuleFor(a => a.Aeropuerto).GreaterThanOrEqualTo(0).WithMessage("{PropertyName} debe ser mayor o igual a {ComparisonValue}");
+            RuleFor(v => v.Viviendas).GreaterThanOrEqualTo(0).WithMessage("{PropertyName} debe ser mayor o igual a {ComparisonValue}");
+            RuleFor(c => c.EstadoId).NotEmpty().WithMessage("{PropertyName} es requerido");
         }
     }
 }

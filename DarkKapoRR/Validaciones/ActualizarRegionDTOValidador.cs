@@ -28,6 +28,8 @@ namespace DarkKapoRR.Validaciones
             RuleFor(p => p.PlantaEnergia).Must(CantidadEdificiosValido).WithMessage("{PropertyName} debe ser mayor o igual a 0");
             RuleFor(p => p.PuertoEspacial).Must(CantidadEdificiosValido).WithMessage("{PropertyName} debe ser mayor o igual a 0");
             RuleFor(a => a.Aeropuerto).Must(CantidadEdificiosValido).WithMessage("{PropertyName} debe ser mayor o igual a 0");
+            RuleFor(v => v.Viviendas).Must(CantidadEdificiosValido).WithMessage("{PropertyName} debe ser mayor o igual a 0");
+            RuleFor(c => c.EstadoId).NotEmpty().WithMessage("{PropertyName} es requerido");
         }
         private bool NombreValido(string? nombre)
         {

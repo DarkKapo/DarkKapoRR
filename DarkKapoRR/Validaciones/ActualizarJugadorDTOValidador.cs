@@ -13,6 +13,7 @@ namespace DarkKapoRR.Validaciones
 
             if (valorRutaId is string valorString) int.TryParse(valorString, out id);
 
+            RuleFor(r => r.RegionId).NotEmpty().WithMessage("{PropertyName} es requerido");
             RuleFor(n => n.Nombre).Must(NombreValido).WithMessage("{PropertyName} debe tener entre 3 a 50 caracteres")
                                   .MustAsync(async (nombre, _) =>
                                   {

@@ -16,6 +16,9 @@ namespace DarkKapoRR.Utilidades
 
             CreateMap<CrearEstadoDTO, Estado>();
             CreateMap<Estado, EstadoDTO>();
+
+            CreateMap<CrearDañoJugadorDTO, DañoJugador>();
+            CreateMap<DañoJugador, DañoJugadorDTO>();
         }
     }
 }
