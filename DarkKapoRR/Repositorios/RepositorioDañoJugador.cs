@@ -1,4 +1,5 @@
-﻿using DarkKapoRR.Entidades;
+﻿using DarkKapoRR.DTOs;
+using DarkKapoRR.Entidades;
 using Microsoft.EntityFrameworkCore;
 
 namespace DarkKapoRR.Repositorios
@@ -37,6 +38,17 @@ namespace DarkKapoRR.Repositorios
         public async Task Eliminar(int id)
         {
             await context.DañosJugador.Where(x => x.Id == id).ExecuteDeleteAsync();
+        }
+
+        public DañoBasicoDto DañosBasico(Jugador jugador)
+        {
+            DañoBasicoDto dañoJugadorDTO = new()
+            {
+                DañoMaximo = Math.Round(((1M + 0.5M + 0.75M + 0M + 0M + 2.5M + (decimal)jugador.Fuerza / 100 + 3M + (decimal)(jugador.Educacion + jugador.Aguante + jugador.Nivel) / 200m) * (decimal)(50000m + (jugador.Nivel * 2500)) * 1.1m * 1.125m), 2, MidpointRounding.AwayFromZero),
+                DañoBase = Math.Round(((1M + 0.05M + 0M + 0M + 0M + 0M + (decimal)jugador.Fuerza / 100 + 0M + (decimal)(jugador.Educacion + jugador.Aguante + jugador.Nivel) / 200m) * (decimal)(50000m + (jugador.Nivel * 2500)) * 1m * 1m), 2, MidpointRounding.AwayFromZero),
+                DañoMinimo = Math.Round(((1M + 0.05M + (-0.75M) + 0M + 0M + 0 + (decimal)jugador.Fuerza / 100 + 0 + (decimal)(jugador.Educacion + jugador.Aguante + jugador.Nivel) / 200m) * (decimal)(50000m + (jugador.Nivel * 2500)) * 1m * 0.875m), 2, MidpointRounding.AwayFromZero)
+            };
+            return dañoJugadorDTO;
         }
     }
 }

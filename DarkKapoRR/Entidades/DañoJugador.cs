@@ -25,10 +25,6 @@ namespace DarkKapoRR.Entidades
         public int BonusNacion { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime? FechaActualizacion { get; set; }
-        public int Version { get; set; }
-        //[Precision(12)]
-        //public decimal DañoMaximo => Math.Round(((1M + 0.5M + 0.75M + 0M + 0M + 2.5M + (decimal)Jugador.Fuerza / 100 + 3M + (decimal)(Jugador.Educacion + Jugador.Aguante + Jugador.Nivel) / 200m) * ((decimal)(Jugador.Educacion + Jugador.Aguante + Jugador.Nivel)) * 1.1m * 1.125m), 2, MidpointRounding.AwayFromZero);
-        //[Precision(12)]
-        //public decimal DañoMinimo => Math.Round(((1M + 0.05M + (-0.75M) + 0M + 0M + 0 + (decimal)Jugador.Fuerza / 100 + 0 + (decimal)(Jugador.Educacion + Jugador.Aguante + Jugador.Nivel) / 200m) * ((decimal)(Jugador.Educacion + Jugador.Aguante + Jugador.Nivel)) * 1m * 0.875m), 2, MidpointRounding.AwayFromZero);
+        public int Version { get; set; }        
     }
 }

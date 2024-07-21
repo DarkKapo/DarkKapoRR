@@ -1,4 +1,5 @@
-﻿using DarkKapoRR.Entidades;
+﻿using DarkKapoRR.DTOs;
+using DarkKapoRR.Entidades;
 
 namespace DarkKapoRR.Repositorios
 {
@@ -10,5 +11,6 @@ namespace DarkKapoRR.Repositorios
         Task<bool> Existe(int id);
         Task Actualizar(DañoJugador dañoJugador);
         Task Eliminar(int id);
+        DañoBasicoDto DañosBasico(Jugador jugador);
     }
 }

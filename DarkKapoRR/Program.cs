@@ -3,6 +3,8 @@ using DarkKapoRR;
 using DarkKapoRR.Repositorios;
 using DarkKapoRR.Endpoints;
 using FluentValidation;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 var origenesPermitidos = builder.Configuration.GetValue<string>("OrigenesPermitidos")!; //con ! digo que el valor no sera nulo
@@ -20,7 +22,11 @@ builder.Services.AddCors(opciones =>
 
 builder.Services.AddOutputCache(); //Declaracion de cache para optimizar las preguntas a la base de datos
 builder.Services.AddEndpointsApiExplorer(); //Documentacion de la API
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "DKToolRR", Version = "v1" });   
+});
+
 
 builder.Services.AddScoped<IRepositorioJugador, RepositorioJugador>();
 builder.Services.AddScoped<IRepositorioRegion, RepositorioRegion>();

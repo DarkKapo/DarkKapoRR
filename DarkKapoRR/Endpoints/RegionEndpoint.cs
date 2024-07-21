@@ -17,7 +17,12 @@ namespace DarkKapoRR.Endpoints
             group.MapPost("/", CrearRegion);
             group.MapPut("/{id}", ActualizarRegion);
             group.MapDelete("/{id}", EliminarRegion);
-            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado);
+            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado).WithOpenApi(opciones =>
+            {
+                opciones.Summary = "Actualiza uno o varios campos";
+                opciones.Description = "Si no deseas actualizar un campo, solo debes eliminarlo";
+                return opciones;
+            });
             return group;
         }
         static async Task<Ok<List<RegionDTO>>> ObtenerRegiones(IRepositorioRegion repositorio, IMapper mapper)

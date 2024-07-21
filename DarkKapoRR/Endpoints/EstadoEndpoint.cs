@@ -16,7 +16,12 @@ namespace DarkKapoRR.Endpoints
             group.MapGet("/{id}", ObtenerEstadoPorId);
             group.MapPost("/", CrearEstado);
             group.MapPut("/{id}", ActualizarEstado);
-            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado);
+            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado).WithOpenApi(opciones =>
+            {
+                opciones.Summary = "Actualiza uno o varios campos";
+                opciones.Description = "Si no deseas actualizar un campo, solo debes eliminarlo";
+                return opciones;
+            });
             group.MapDelete("/{id}", EliminarEstado);
             return group;
         }

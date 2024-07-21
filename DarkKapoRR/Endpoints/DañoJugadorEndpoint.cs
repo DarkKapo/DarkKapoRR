@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using DarkKapoRR.DTOs;
-using DarkKapoRR.Entidades;
-using DarkKapoRR.Repositorios;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OutputCaching;
+using DarkKapoRR.DTOs;
+using DarkKapoRR.Entidades;
+using DarkKapoRR.Repositorios;
 
 namespace DarkKapoRR.Endpoints
 {
@@ -17,7 +17,18 @@ namespace DarkKapoRR.Endpoints
             group.MapPost("/", CrearDañoJugador);
             group.MapPut("/{id}", ActualizarDañoJugador);
             group.MapDelete("/{id}", EliminarDañoJugador);
-            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado);
+            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado).WithOpenApi(opciones =>
+            {
+                opciones.Summary = "Actualiza uno o varios campos";
+                opciones.Description = "Si no deseas actualizar un campo, solo debes eliminarlo";
+                return opciones;
+            });
+            group.MapGet("/{jugadorId}/ataquesbasico", DañosBasico).WithOpenApi(opciones =>
+            {
+                opciones.Summary = "Obtiene los daños basicos de un jugador";
+                opciones.Description = "Obtiene los daños Mínimo, Base (sin bonus nación) y Máximo de un jugador";
+                return opciones;
+            });
             return group;
         }
         static async Task<Ok<List<DañoJugadorDTO>>> ObtenerDañoJugador(IRepositorioDañoJugador repositorio, IMapper mapper)
@@ -127,6 +138,16 @@ namespace DarkKapoRR.Endpoints
             await repositorio.Eliminar(id);
             await outputCacheStore.EvictByTagAsync("dañosjugadores-get", default);
             return TypedResults.NoContent();
+        }
+
+        static async Task<Results<Ok<DañoBasicoDto>, NotFound>> DañosBasico(IRepositorioDañoJugador repositorio, IRepositorioJugador repositorioJugador, int jugadorId)
+        {   //La logica es el el RepositorioDañoJugador
+            var Jugador = await repositorioJugador.ObtenerPorId(jugadorId);
+            if (Jugador is null) return TypedResults.NotFound();
+
+            var dañoJugadorDTO = repositorio.DañosBasico(Jugador);
+            
+            return TypedResults.Ok(dañoJugadorDTO);
         }
     }
 }
