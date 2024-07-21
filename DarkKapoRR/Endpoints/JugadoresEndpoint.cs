@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using DarkKapoRR.DTOs;
 using DarkKapoRR.Entidades;
+using DarkKapoRR.Filtros;
 using DarkKapoRR.Repositorios;
-using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OutputCaching;
 
@@ -14,10 +14,10 @@ namespace DarkKapoRR.Endpoints
         {
             group.MapGet("/", ObtenerJugadores).CacheOutput(c => c.Expire(TimeSpan.FromMinutes(30)).Tag("jugadores-get"));
             group.MapGet("/{id}", ObtenerJugadorPorId);
-            group.MapPost("/", CrearJugador);
-            group.MapPut("/{id}", ActualizarJugador);
+            group.MapPost("/", CrearJugador).AddEndpointFilter<FiltroValidaciones<CrearJugadorDTO>>();
+            group.MapPut("/{id}", ActualizarJugador).AddEndpointFilter<FiltroValidaciones<CrearJugadorDTO>>();
             group.MapDelete("/{id}", EliminarJugador);
-            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado).WithOpenApi(opciones =>
+            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado).AddEndpointFilter<FiltroValidaciones<ActualizarJugadorDTO>>().WithOpenApi(opciones =>
             {
                 opciones.Summary = "Actualiza uno o varios campos";
                 opciones.Description = "Si no deseas actualizar un campo, solo debes eliminarlo";
@@ -40,10 +40,8 @@ namespace DarkKapoRR.Endpoints
             return TypedResults.NotFound();
         }
 
-        static async Task<Results<Created<JugadorDTO>, ValidationProblem>> CrearJugador(CrearJugadorDTO crearJugadorDTO, IRepositorioJugador repositorio, IOutputCacheStore outputCacheStore, IMapper mapper, IValidator<CrearJugadorDTO> validador)
+        static async Task<Results<Created<JugadorDTO>, ValidationProblem>> CrearJugador(CrearJugadorDTO crearJugadorDTO, IRepositorioJugador repositorio, IOutputCacheStore outputCacheStore, IMapper mapper)
         {
-            var resultadoValidacion = await validador.ValidateAsync(crearJugadorDTO);
-            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
             crearJugadorDTO.FechaCreacion = DateTime.Now;
             var jugador = mapper.Map<Jugador>(crearJugadorDTO);//Uso de automapper
             var id = await repositorio.Crear(jugador);
@@ -52,10 +50,8 @@ namespace DarkKapoRR.Endpoints
             return TypedResults.Created($"/jugador/{id}", jugadorDTO);
         }
 
-        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizarJugador(CrearJugadorDTO crearJugadorDTO, IRepositorioJugador repositorio, IOutputCacheStore outputCacheStore, int id, IMapper mapper, IValidator<CrearJugadorDTO> validador)
+        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizarJugador(CrearJugadorDTO crearJugadorDTO, IRepositorioJugador repositorio, IOutputCacheStore outputCacheStore, int id, IMapper mapper)
         {
-            var resultadoValidacion = await validador.ValidateAsync(crearJugadorDTO);
-            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
             var existe = await repositorio.Existe(id);
             if (!existe) return TypedResults.NotFound();
             var fechaCreacionDB = (await repositorio.ObtenerPorId(id))?.FechaCreacion;
@@ -69,11 +65,8 @@ namespace DarkKapoRR.Endpoints
             return TypedResults.NoContent();
         }
 
-        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizadoPersonalizado(ActualizarJugadorDTO actualizarJugadorDTO, IRepositorioJugador repositorio, IOutputCacheStore outputCacheStore, int id, IValidator<ActualizarJugadorDTO> validador)
+        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizadoPersonalizado(ActualizarJugadorDTO actualizarJugadorDTO, IRepositorioJugador repositorio, IOutputCacheStore outputCacheStore, int id)
         {
-            var resultadoValidacion = await validador.ValidateAsync(actualizarJugadorDTO);
-            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
-
             var jugador = await repositorio.ObtenerPorId(id);
             if (jugador == null) return TypedResults.NotFound();
 

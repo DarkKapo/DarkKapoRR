@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using DarkKapoRR.DTOs;
 using DarkKapoRR.Entidades;
+using DarkKapoRR.Filtros;
 using DarkKapoRR.Repositorios;
-using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OutputCaching;
 
@@ -14,9 +14,9 @@ namespace DarkKapoRR.Endpoints
         {
             group.MapGet("/", ObtenerEstados).CacheOutput(c => c.Expire(TimeSpan.FromMinutes(30)).Tag("estados-get"));
             group.MapGet("/{id}", ObtenerEstadoPorId);
-            group.MapPost("/", CrearEstado);
-            group.MapPut("/{id}", ActualizarEstado);
-            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado).WithOpenApi(opciones =>
+            group.MapPost("/", CrearEstado).AddEndpointFilter<FiltroValidaciones<CrearEstadoDTO>>();
+            group.MapPut("/{id}", ActualizarEstado).AddEndpointFilter<FiltroValidaciones<CrearEstadoDTO>>();
+            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado).AddEndpointFilter<FiltroValidaciones<ActualizarEstadoDTO>>().WithOpenApi(opciones =>
             {
                 opciones.Summary = "Actualiza uno o varios campos";
                 opciones.Description = "Si no deseas actualizar un campo, solo debes eliminarlo";
@@ -38,10 +38,8 @@ namespace DarkKapoRR.Endpoints
             if (estado is not null) return TypedResults.Ok(estadoDTO);
             return TypedResults.NotFound();
         }
-        static async Task<Results<Created<EstadoDTO>, ValidationProblem>> CrearEstado(CrearEstadoDTO crearEstadoDTO, IRepositorioEstado repositorio, IOutputCacheStore outputCacheStore, IMapper mapper, IValidator<CrearEstadoDTO> validador)
+        static async Task<Results<Created<EstadoDTO>, ValidationProblem>> CrearEstado(CrearEstadoDTO crearEstadoDTO, IRepositorioEstado repositorio, IOutputCacheStore outputCacheStore, IMapper mapper)
         {
-            var resultadoValidacion = await validador.ValidateAsync(crearEstadoDTO);
-            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
             crearEstadoDTO.FechaCreacion = DateTime.Now;
             var estado = mapper.Map<Estado>(crearEstadoDTO);
             var id = await repositorio.Crear(estado);
@@ -49,11 +47,8 @@ namespace DarkKapoRR.Endpoints
             var estadoDTO = mapper.Map<EstadoDTO>(estado);
             return TypedResults.Created($"/estado/{id}", estadoDTO);
         }
-        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizarEstado(CrearEstadoDTO crearEstadoDTO, IRepositorioEstado repositorio, IOutputCacheStore outputCacheStore, int id, IMapper mapper, IValidator<CrearEstadoDTO> validador)
+        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizarEstado(CrearEstadoDTO crearEstadoDTO, IRepositorioEstado repositorio, IOutputCacheStore outputCacheStore, int id, IMapper mapper)
         {
-            var resultadoValidacion = await validador.ValidateAsync(crearEstadoDTO);
-            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
-
             var existe = await repositorio.Existe(id);
             if (!existe) return TypedResults.NotFound();
 
@@ -68,11 +63,8 @@ namespace DarkKapoRR.Endpoints
             await outputCacheStore.EvictByTagAsync("estados-get", default);
             return TypedResults.NoContent();
         }
-        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizadoPersonalizado(ActualizarEstadoDTO actualizarEstadoDTO, IRepositorioEstado repositorio, IOutputCacheStore outputCacheStore, int id, IValidator<ActualizarEstadoDTO> validador)
+        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizadoPersonalizado(ActualizarEstadoDTO actualizarEstadoDTO, IRepositorioEstado repositorio, IOutputCacheStore outputCacheStore, int id)
         {
-            var resultadoValidacion = await validador.ValidateAsync(actualizarEstadoDTO);
-            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
-
             var estado = await repositorio.ObtenerPorId(id);
             if (estado == null) return TypedResults.NotFound();
 

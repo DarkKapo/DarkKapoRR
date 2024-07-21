@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OutputCaching;
 using DarkKapoRR.DTOs;
 using DarkKapoRR.Entidades;
 using DarkKapoRR.Repositorios;
+using DarkKapoRR.Filtros;
 
 namespace DarkKapoRR.Endpoints
 {
@@ -14,10 +14,10 @@ namespace DarkKapoRR.Endpoints
         {
             group.MapGet("/", ObtenerDañoJugador).CacheOutput(c => c.Expire(TimeSpan.FromMinutes(30)).Tag("dañosjugadores-get"));
             group.MapGet("/{id}", ObtenerDañoJugadorPorId);
-            group.MapPost("/", CrearDañoJugador);
-            group.MapPut("/{id}", ActualizarDañoJugador);
+            group.MapPost("/", CrearDañoJugador).AddEndpointFilter<FiltroValidaciones<CrearDañoJugadorDTO>>();
+            group.MapPut("/{id}", ActualizarDañoJugador).AddEndpointFilter<FiltroValidaciones<CrearDañoJugadorDTO>>();
             group.MapDelete("/{id}", EliminarDañoJugador);
-            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado).WithOpenApi(opciones =>
+            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado).AddEndpointFilter<FiltroValidaciones<ActualizarDañoJugadorDTO>>().WithOpenApi(opciones =>
             {
                 opciones.Summary = "Actualiza uno o varios campos";
                 opciones.Description = "Si no deseas actualizar un campo, solo debes eliminarlo";
@@ -44,11 +44,8 @@ namespace DarkKapoRR.Endpoints
             if (dañoJugador is not null) return TypedResults.Ok(dañoJugadorDTO);
             return TypedResults.NotFound();
         }
-        static async Task<Results<Created<DañoJugadorDTO>, ValidationProblem>> CrearDañoJugador(CrearDañoJugadorDTO crearDañoJugadorDTO, IRepositorioDañoJugador repositorio, IOutputCacheStore outputCacheStore, IMapper mapper, IValidator<CrearDañoJugadorDTO> validador, IRepositorioRegion repositorioRegion, IRepositorioJugador repositorioJugador)
-        {
-            var resultadoValidacion = await validador.ValidateAsync(crearDañoJugadorDTO);
-            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
-            
+        static async Task<Results<Created<DañoJugadorDTO>, ValidationProblem>> CrearDañoJugador(CrearDañoJugadorDTO crearDañoJugadorDTO, IRepositorioDañoJugador repositorio, IOutputCacheStore outputCacheStore, IMapper mapper, IRepositorioRegion repositorioRegion, IRepositorioJugador repositorioJugador)
+        {            
             crearDañoJugadorDTO.FechaCreacion = DateTime.Now;
             var dañoJugador = mapper.Map<DañoJugador>(crearDañoJugadorDTO);
 
@@ -84,11 +81,8 @@ namespace DarkKapoRR.Endpoints
             var dañoJugadorDTO = mapper.Map<DañoJugadorDTO>(dañoJugador);
             return TypedResults.Created($"/ataquejugador/{id}", dañoJugadorDTO);
         }
-        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizarDañoJugador(CrearDañoJugadorDTO crearDañoJugadorDTO, IRepositorioDañoJugador repositorio, IOutputCacheStore outputCacheStore, int id, IMapper mapper, IValidator<CrearDañoJugadorDTO> validador)
+        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizarDañoJugador(CrearDañoJugadorDTO crearDañoJugadorDTO, IRepositorioDañoJugador repositorio, IOutputCacheStore outputCacheStore, int id, IMapper mapper)
         {
-            var resultadoValidacion = await validador.ValidateAsync(crearDañoJugadorDTO);
-            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
-
             var existe = await repositorio.Existe(id);
             if (!existe) return TypedResults.NotFound();
 
@@ -102,11 +96,8 @@ namespace DarkKapoRR.Endpoints
             await outputCacheStore.EvictByTagAsync("dañosjugadores-get", default);
             return TypedResults.NoContent();
         }
-        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizadoPersonalizado(ActualizarDañoJugadorDTO actualizarDañoJugadorDTO, IRepositorioDañoJugador repositorio, IOutputCacheStore outputCacheStore, int id, IValidator<ActualizarDañoJugadorDTO> validador)
+        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizadoPersonalizado(ActualizarDañoJugadorDTO actualizarDañoJugadorDTO, IRepositorioDañoJugador repositorio, IOutputCacheStore outputCacheStore, int id)
         {
-            var resultadoValidacion = await validador.ValidateAsync(actualizarDañoJugadorDTO);
-            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
-
             var dañoJugador = await repositorio.ObtenerPorId(id);
             if (dañoJugador == null) return TypedResults.NotFound();
 

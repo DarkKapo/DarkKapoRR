@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using DarkKapoRR.DTOs;
 using DarkKapoRR.Entidades;
+using DarkKapoRR.Filtros;
 using DarkKapoRR.Repositorios;
-using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OutputCaching;
 
@@ -14,10 +14,10 @@ namespace DarkKapoRR.Endpoints
         {
             group.MapGet("/", ObtenerRegiones).CacheOutput(c => c.Expire(TimeSpan.FromMinutes(30)).Tag("jugadores-get"));
             group.MapGet("/{id}", ObtenerRegionPorId);
-            group.MapPost("/", CrearRegion);
-            group.MapPut("/{id}", ActualizarRegion);
+            group.MapPost("/", CrearRegion).AddEndpointFilter<FiltroValidaciones<CrearRegionDTO>>();
+            group.MapPut("/{id}", ActualizarRegion).AddEndpointFilter<FiltroValidaciones<CrearRegionDTO>>();
             group.MapDelete("/{id}", EliminarRegion);
-            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado).WithOpenApi(opciones =>
+            group.MapPut("/{id}/personalizado", ActualizadoPersonalizado).AddEndpointFilter<FiltroValidaciones<ActualizarRegionDTO>>().WithOpenApi(opciones =>
             {
                 opciones.Summary = "Actualiza uno o varios campos";
                 opciones.Description = "Si no deseas actualizar un campo, solo debes eliminarlo";
@@ -38,10 +38,8 @@ namespace DarkKapoRR.Endpoints
             if (region is not null) return TypedResults.Ok(regionDTO);
             return TypedResults.NotFound();
         }
-        static async Task<Results<Created<RegionDTO>, ValidationProblem>> CrearRegion(CrearRegionDTO crearRegionDTO, IRepositorioRegion repositorio, IOutputCacheStore outputCacheStore, IMapper mapper, IValidator<CrearRegionDTO> validador)
+        static async Task<Results<Created<RegionDTO>, ValidationProblem>> CrearRegion(CrearRegionDTO crearRegionDTO, IRepositorioRegion repositorio, IOutputCacheStore outputCacheStore, IMapper mapper)
         {
-            var resultadoValidacion = await validador.ValidateAsync(crearRegionDTO);
-            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
             crearRegionDTO.FechaCreacion = DateTime.Now;
             var region = mapper.Map<Region>(crearRegionDTO);
             var id = await repositorio.Crear(region);
@@ -49,11 +47,8 @@ namespace DarkKapoRR.Endpoints
             var regionDTO = mapper.Map<RegionDTO>(region);
             return TypedResults.Created($"/region/{id}", regionDTO);
         }
-        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizarRegion(CrearRegionDTO crearRegionDTO, IRepositorioRegion repositorio, IOutputCacheStore outputCacheStore, int id, IMapper mapper, IValidator<CrearRegionDTO> validador)
+        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizarRegion(CrearRegionDTO crearRegionDTO, IRepositorioRegion repositorio, IOutputCacheStore outputCacheStore, int id, IMapper mapper)
         {
-            var resultadoValidacion = await validador.ValidateAsync(crearRegionDTO);
-            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
-
             var existe = await repositorio.Existe(id);
             if (!existe) return TypedResults.NotFound();
 
@@ -68,11 +63,8 @@ namespace DarkKapoRR.Endpoints
             await outputCacheStore.EvictByTagAsync("regiones-get", default);
             return TypedResults.NoContent();
         }
-        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizadoPersonalizado(ActualizarRegionDTO actualizarRegionDTO, IRepositorioRegion repositorio, IOutputCacheStore outputCacheStore, int id, IValidator<ActualizarRegionDTO> validador)
+        static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizadoPersonalizado(ActualizarRegionDTO actualizarRegionDTO, IRepositorioRegion repositorio, IOutputCacheStore outputCacheStore, int id)
         {
-            var resultadoValidacion = await validador.ValidateAsync(actualizarRegionDTO);
-            if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
-
             var region = await repositorio.ObtenerPorId(id);
             if (region == null) return TypedResults.NotFound();
 
