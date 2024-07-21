@@ -6,7 +6,7 @@ namespace DarkKapoRR.DTOs
     public class ActualizarDañoJugadorDTO
     {
         public int? JugadorId { get; set; } = null;
-        public int? IndiceMilitar { get; set; } = null;
+        public int? BaseMilitar { get; set; } = null;
         public int? SistemaMisiles { get; set; } = null;
         public int? PuertoNaval { get; set; } = null;
         public int? Aeropuerto { get; set; } = null;

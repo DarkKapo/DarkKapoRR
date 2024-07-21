@@ -17,11 +17,7 @@ namespace DarkKapoRR.Entidades
         public int RegionId { get; set; }
         [ForeignKey("RegionId")]
         public Region Region { get; set; } = null!;
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime FechaCreacion { get; set; }
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? FechaActualizacion { get; set; } = null;
         public int Version { get; set; }
     }

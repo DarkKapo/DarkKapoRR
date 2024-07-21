@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DarkKapoRR.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240719044710_TablasIniciales")]
+    [Migration("20240721002734_TablasIniciales")]
     partial class TablasIniciales
     {
         /// <inheritdoc />
@@ -42,6 +42,9 @@ namespace DarkKapoRR.Migrations
                     b.Property<int>("Aguante")
                         .HasColumnType("int");
 
+                    b.Property<int>("BaseMilitar")
+                        .HasColumnType("int");
+
                     b.Property<int>("BonusNacion")
                         .HasColumnType("int");
 
@@ -55,9 +58,6 @@ namespace DarkKapoRR.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Fuerza")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IndiceMilitar")
                         .HasColumnType("int");
 
                     b.Property<int>("JugadorId")
@@ -118,14 +118,14 @@ namespace DarkKapoRR.Migrations
                         new
                         {
                             Id = 1,
-                            FechaCreacion = new DateTime(2024, 7, 19, 0, 47, 10, 444, DateTimeKind.Local).AddTicks(9864),
+                            FechaCreacion = new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(8754),
                             Nombre = "Lunar",
                             Version = 0
                         },
                         new
                         {
                             Id = 2,
-                            FechaCreacion = new DateTime(2024, 7, 19, 0, 47, 10, 444, DateTimeKind.Local).AddTicks(9902),
+                            FechaCreacion = new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(8797),
                             Nombre = "Reino de Chile",
                             Version = 0
                         });
@@ -184,7 +184,7 @@ namespace DarkKapoRR.Migrations
                             Id = 1,
                             Aguante = 999,
                             Educacion = 999,
-                            FechaCreacion = new DateTime(2024, 7, 19, 0, 47, 10, 445, DateTimeKind.Local).AddTicks(118),
+                            FechaCreacion = new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(9036),
                             Fuerza = 999,
                             Nivel = 107,
                             Nombre = "DarkKapo",
@@ -196,7 +196,7 @@ namespace DarkKapoRR.Migrations
                             Id = 2,
                             Aguante = 459,
                             Educacion = 459,
-                            FechaCreacion = new DateTime(2024, 7, 19, 0, 47, 10, 445, DateTimeKind.Local).AddTicks(121),
+                            FechaCreacion = new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(9040),
                             Fuerza = 648,
                             Nivel = 102,
                             Nombre = "Kapo",
@@ -208,7 +208,7 @@ namespace DarkKapoRR.Migrations
                             Id = 3,
                             Aguante = 193,
                             Educacion = 401,
-                            FechaCreacion = new DateTime(2024, 7, 19, 0, 47, 10, 445, DateTimeKind.Local).AddTicks(123),
+                            FechaCreacion = new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(9042),
                             Fuerza = 193,
                             Nivel = 89,
                             Nombre = "Osva",
@@ -287,7 +287,7 @@ namespace DarkKapoRR.Migrations
                             BaseMilitar = 730,
                             Escuela = 1058,
                             EstadoId = 1,
-                            FechaCreacion = new DateTime(2024, 7, 19, 0, 47, 10, 445, DateTimeKind.Local).AddTicks(51),
+                            FechaCreacion = new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(8964),
                             Hospital = 1872,
                             Nombre = "MR 7",
                             PlantaEnergia = 1850,
@@ -305,7 +305,7 @@ namespace DarkKapoRR.Migrations
                             BaseMilitar = 534,
                             Escuela = 55,
                             EstadoId = 1,
-                            FechaCreacion = new DateTime(2024, 7, 19, 0, 47, 10, 445, DateTimeKind.Local).AddTicks(56),
+                            FechaCreacion = new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(8969),
                             Hospital = 1871,
                             Nombre = "MR 38",
                             PlantaEnergia = 600,
@@ -323,7 +323,7 @@ namespace DarkKapoRR.Migrations
                             BaseMilitar = 1280,
                             Escuela = 970,
                             EstadoId = 1,
-                            FechaCreacion = new DateTime(2024, 7, 19, 0, 47, 10, 445, DateTimeKind.Local).AddTicks(58),
+                            FechaCreacion = new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(8972),
                             Hospital = 1872,
                             Nombre = "MR 68",
                             PlantaEnergia = 970,
@@ -341,7 +341,7 @@ namespace DarkKapoRR.Migrations
                             BaseMilitar = 108,
                             Escuela = 275,
                             EstadoId = 2,
-                            FechaCreacion = new DateTime(2024, 7, 19, 0, 47, 10, 445, DateTimeKind.Local).AddTicks(61),
+                            FechaCreacion = new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(8974),
                             Hospital = 1283,
                             Nombre = "Magallanes",
                             PlantaEnergia = 440,

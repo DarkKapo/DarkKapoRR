@@ -33,16 +33,45 @@ namespace DarkKapoRR.Endpoints
             if (dañoJugador is not null) return TypedResults.Ok(dañoJugadorDTO);
             return TypedResults.NotFound();
         }
-        static async Task<Results<Created<DañoJugadorDTO>, ValidationProblem>> CrearDañoJugador(CrearDañoJugadorDTO crearDañoJugadorDTO, IRepositorioDañoJugador repositorio, IOutputCacheStore outputCacheStore, IMapper mapper, IValidator<CrearDañoJugadorDTO> validador)
+        static async Task<Results<Created<DañoJugadorDTO>, ValidationProblem>> CrearDañoJugador(CrearDañoJugadorDTO crearDañoJugadorDTO, IRepositorioDañoJugador repositorio, IOutputCacheStore outputCacheStore, IMapper mapper, IValidator<CrearDañoJugadorDTO> validador, IRepositorioRegion repositorioRegion, IRepositorioJugador repositorioJugador)
         {
             var resultadoValidacion = await validador.ValidateAsync(crearDañoJugadorDTO);
             if (!resultadoValidacion.IsValid) return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
+            
             crearDañoJugadorDTO.FechaCreacion = DateTime.Now;
             var dañoJugador = mapper.Map<DañoJugador>(crearDañoJugadorDTO);
+
+            if (crearDañoJugadorDTO.RegionId != null || crearDañoJugadorDTO.RegionId != 0)
+            {
+                var region = repositorioRegion.ObtenerPorId(crearDañoJugadorDTO.RegionId.GetValueOrDefault()).Result;
+                if (region != null)
+                { 
+                    dañoJugador.AcademiaMilitar = region.AcademiaMilitar;
+                    dañoJugador.BaseMilitar = region.BaseMilitar;
+                    dañoJugador.SistemaMisiles = region.SistemaMisiles;
+                    dañoJugador.PuertoNaval = region.PuertoNaval;
+                    dañoJugador.PuertoEspacial = region.PuertoEspacial;
+                    dañoJugador.Aeropuerto = region.Aeropuerto;
+                }
+            }
+
+            if (crearDañoJugadorDTO.JugadorId != null || crearDañoJugadorDTO.JugadorId != 0)
+            {
+                var jugador = repositorioJugador.ObtenerPorId(crearDañoJugadorDTO.JugadorId.GetValueOrDefault()).Result;
+                if(jugador != null)
+                {
+                    dañoJugador.Fuerza = jugador.Fuerza;
+                    dañoJugador.Educacion = jugador.Educacion;
+                    dañoJugador.Aguante = jugador.Aguante;
+                    dañoJugador.Nivel = jugador.Nivel;
+                    dañoJugador.Tropas = (50000+(jugador.Nivel * 2500));
+                }
+            }
+
             var id = await repositorio.Crear(dañoJugador);
             await outputCacheStore.EvictByTagAsync("dañosjugadores-get", default);
             var dañoJugadorDTO = mapper.Map<DañoJugadorDTO>(dañoJugador);
-            return TypedResults.Created($"/dañosjugador/{id}", dañoJugadorDTO);
+            return TypedResults.Created($"/ataquejugador/{id}", dañoJugadorDTO);
         }
         static async Task<Results<NoContent, NotFound, ValidationProblem>> ActualizarDañoJugador(CrearDañoJugadorDTO crearDañoJugadorDTO, IRepositorioDañoJugador repositorio, IOutputCacheStore outputCacheStore, int id, IMapper mapper, IValidator<CrearDañoJugadorDTO> validador)
         {
@@ -71,7 +100,7 @@ namespace DarkKapoRR.Endpoints
             if (dañoJugador == null) return TypedResults.NotFound();
 
             if(actualizarDañoJugadorDTO.JugadorId != null) dañoJugador.JugadorId = actualizarDañoJugadorDTO.JugadorId.GetValueOrDefault();
-            if(actualizarDañoJugadorDTO.IndiceMilitar != null) dañoJugador.IndiceMilitar = actualizarDañoJugadorDTO.IndiceMilitar.GetValueOrDefault();
+            if(actualizarDañoJugadorDTO.BaseMilitar != null) dañoJugador.BaseMilitar = actualizarDañoJugadorDTO.BaseMilitar.GetValueOrDefault();
             if(actualizarDañoJugadorDTO.SistemaMisiles != null) dañoJugador.SistemaMisiles = actualizarDañoJugadorDTO.SistemaMisiles.GetValueOrDefault();
             if(actualizarDañoJugadorDTO.PuertoNaval != null) dañoJugador.PuertoNaval = actualizarDañoJugadorDTO.PuertoNaval.GetValueOrDefault();
             if(actualizarDañoJugadorDTO.Aeropuerto != null) dañoJugador.Aeropuerto = actualizarDañoJugadorDTO.Aeropuerto.GetValueOrDefault();
@@ -86,6 +115,7 @@ namespace DarkKapoRR.Endpoints
             
             dañoJugador.Id = id;
             dañoJugador.FechaActualizacion = DateTime.Now;
+            dañoJugador.Version++;
             await repositorio.Actualizar(dañoJugador);
             await outputCacheStore.EvictByTagAsync("dañosjugadores-get", default);
             return TypedResults.NoContent();

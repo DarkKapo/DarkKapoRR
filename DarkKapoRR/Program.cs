@@ -49,7 +49,7 @@ app.UseOutputCache(); //Uso de cache para optimizar las preguntas a la base de d
 app.MapGroup("/jugadores").MapJugadores();
 app.MapGroup("/regiones").MapRegiones();
 app.MapGroup("/estados").MapEstados();
-app.MapGroup("/dañosjugador").MapDañoJugador();
+app.MapGroup("/ataquejugador").MapDañoJugador();
 
 //Fin area middleware
 

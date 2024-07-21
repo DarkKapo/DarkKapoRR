@@ -20,8 +20,6 @@ namespace DarkKapoRR.DTOs
         public int BonusNacion { get; set; }
         public DateTime FechaCreacion { get; set; }
         //[Precision(12)]
-        //public decimal TropasTotal { get; set; }
-        //[Precision(12)]
         //public decimal DañoMaximo { get; set; }
         //[Precision(12)]
         //public decimal DañoMinimo { get; set; }

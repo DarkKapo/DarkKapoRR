@@ -97,12 +97,12 @@ namespace DarkKapoRR.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     JugadorId = table.Column<int>(type: "int", nullable: false),
-                    IndiceMilitar = table.Column<int>(type: "int", nullable: false),
+                    AcademiaMilitar = table.Column<int>(type: "int", nullable: false),
+                    BaseMilitar = table.Column<int>(type: "int", nullable: false),
                     SistemaMisiles = table.Column<int>(type: "int", nullable: false),
                     PuertoNaval = table.Column<int>(type: "int", nullable: false),
-                    Aeropuerto = table.Column<int>(type: "int", nullable: false),
                     PuertoEspacial = table.Column<int>(type: "int", nullable: false),
-                    AcademiaMilitar = table.Column<int>(type: "int", nullable: false),
+                    Aeropuerto = table.Column<int>(type: "int", nullable: false),
                     Fuerza = table.Column<int>(type: "int", nullable: false),
                     Educacion = table.Column<int>(type: "int", nullable: false),
                     Aguante = table.Column<int>(type: "int", nullable: false),
@@ -129,8 +129,8 @@ namespace DarkKapoRR.Migrations
                 columns: new[] { "Id", "FechaActualizacion", "FechaCreacion", "Nombre", "Version" },
                 values: new object[,]
                 {
-                    { 1, null, new DateTime(2024, 7, 19, 0, 47, 10, 444, DateTimeKind.Local).AddTicks(9864), "Lunar", 0 },
-                    { 2, null, new DateTime(2024, 7, 19, 0, 47, 10, 444, DateTimeKind.Local).AddTicks(9902), "Reino de Chile", 0 }
+                    { 1, null, new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(8754), "Lunar", 0 },
+                    { 2, null, new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(8797), "Reino de Chile", 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -138,10 +138,10 @@ namespace DarkKapoRR.Migrations
                 columns: new[] { "Id", "AcademiaMilitar", "Aeropuerto", "BaseMilitar", "Escuela", "EstadoId", "FechaActualizacion", "FechaCreacion", "Hospital", "Nombre", "PlantaEnergia", "PuertoEspacial", "PuertoNaval", "SistemaMisiles", "Version", "Viviendas" },
                 values: new object[,]
                 {
-                    { 1, 136, 4000, 730, 1058, 1, null, new DateTime(2024, 7, 19, 0, 47, 10, 445, DateTimeKind.Local).AddTicks(51), 1872, "MR 7", 1850, 1510, 0, 0, 0, 10200 },
-                    { 2, 194, 8, 534, 55, 1, null, new DateTime(2024, 7, 19, 0, 47, 10, 445, DateTimeKind.Local).AddTicks(56), 1871, "MR 38", 600, 4, 0, 0, 0, 9520 },
-                    { 3, 198, 425, 1280, 970, 1, null, new DateTime(2024, 7, 19, 0, 47, 10, 445, DateTimeKind.Local).AddTicks(58), 1872, "MR 68", 970, 305, 0, 0, 0, 10200 },
-                    { 4, 43, 118, 108, 275, 2, null, new DateTime(2024, 7, 19, 0, 47, 10, 445, DateTimeKind.Local).AddTicks(61), 1283, "Magallanes", 440, 9, 263, 300, 0, 10315 }
+                    { 1, 136, 4000, 730, 1058, 1, null, new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(8964), 1872, "MR 7", 1850, 1510, 0, 0, 0, 10200 },
+                    { 2, 194, 8, 534, 55, 1, null, new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(8969), 1871, "MR 38", 600, 4, 0, 0, 0, 9520 },
+                    { 3, 198, 425, 1280, 970, 1, null, new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(8972), 1872, "MR 68", 970, 305, 0, 0, 0, 10200 },
+                    { 4, 43, 118, 108, 275, 2, null, new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(8974), 1283, "Magallanes", 440, 9, 263, 300, 0, 10315 }
                 });
 
             migrationBuilder.InsertData(
@@ -149,9 +149,9 @@ namespace DarkKapoRR.Migrations
                 columns: new[] { "Id", "Aguante", "Educacion", "EnlacePerfil", "FechaActualizacion", "FechaCreacion", "Fuerza", "Nivel", "Nombre", "RegionId", "Version" },
                 values: new object[,]
                 {
-                    { 1, 999, 999, null, null, new DateTime(2024, 7, 19, 0, 47, 10, 445, DateTimeKind.Local).AddTicks(118), 999, 107, "DarkKapo", 1, 0 },
-                    { 2, 459, 459, null, null, new DateTime(2024, 7, 19, 0, 47, 10, 445, DateTimeKind.Local).AddTicks(121), 648, 102, "Kapo", 2, 0 },
-                    { 3, 193, 401, null, null, new DateTime(2024, 7, 19, 0, 47, 10, 445, DateTimeKind.Local).AddTicks(123), 193, 89, "Osva", 4, 0 }
+                    { 1, 999, 999, null, null, new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(9036), 999, 107, "DarkKapo", 1, 0 },
+                    { 2, 459, 459, null, null, new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(9040), 648, 102, "Kapo", 2, 0 },
+                    { 3, 193, 401, null, null, new DateTime(2024, 7, 20, 20, 27, 33, 995, DateTimeKind.Local).AddTicks(9042), 193, 89, "Osva", 4, 0 }
                 });
 
             migrationBuilder.CreateIndex(

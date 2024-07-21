@@ -8,7 +8,7 @@ namespace DarkKapoRR.Validaciones
         public ActualizarDañoJugadorDTOValidador()
         {
             RuleFor(j => j.JugadorId).Must(CantidadEdificiosValido).WithMessage("{PropertyName} debe ser mayor o igual a 0");
-            RuleFor(i => i.IndiceMilitar).Must(CantidadEdificiosValido).WithMessage("{PropertyName} debe ser mayor o igual a 0");
+            RuleFor(i => i.BaseMilitar).Must(CantidadEdificiosValido).WithMessage("{PropertyName} debe ser mayor o igual a 0");
             RuleFor(s => s.SistemaMisiles).Must(CantidadEdificiosValido).WithMessage("{PropertyName} debe ser mayor o igual a 0");
             RuleFor(p => p.PuertoNaval).Must(CantidadEdificiosValido).WithMessage("{PropertyName} debe ser mayor o igual a 0");
             RuleFor(a => a.Aeropuerto).Must(CantidadEdificiosValido).WithMessage("{PropertyName} debe ser mayor o igual a 0");
